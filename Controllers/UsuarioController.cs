@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using UsuarioApi.Data;
 using UsuarioApi.Data.Dtos;
+using UsuarioApi.Services;
 
 namespace UsuarioApi.Controllers
 {
@@ -9,10 +13,20 @@ namespace UsuarioApi.Controllers
     public class UsuarioController : ControllerBase
     {
 
-        [HttpPost]
-        public IActionResult CadastraUsuario([FromBody]CreateUsuarioDto dto)
+        private CadastroService _cadastroSevice;
+
+        public UsuarioController(CadastroService cadastroSevice)
         {
-            throw new NotImplementedException();
+            _cadastroSevice = cadastroSevice;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CadastraUsuarioAsync([FromBody]CreateUsuarioDto dto)
+        {
+             await _cadastroSevice.Cadastro(dto);
+            return Ok("Usuário cadastrado");
+
+
         }
     }
 }
