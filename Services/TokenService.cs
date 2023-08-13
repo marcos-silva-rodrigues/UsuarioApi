@@ -8,13 +8,14 @@ namespace UsuarioApi.Services
 {
     public class TokenService
     {
-        public JwtSecurityToken GenerateToken(Usuario usuario)
+        public string GenerateToken(Usuario usuario)
         {
             Claim[] claims = new Claim[]
             { 
                 new Claim("username", usuario.UserName),
                 new Claim("id", usuario.Id),
-                new Claim(ClaimTypes.DateOfBirth, usuario.DataNascimento.ToString())
+                new Claim(ClaimTypes.DateOfBirth, usuario.DataNascimento.ToString()),
+                new Claim("loginTimestamp", DateTime.UtcNow.ToString())
             };
 
             var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9ASHDA98H9ah9ha9H9A89n0f"));
@@ -25,7 +26,7 @@ namespace UsuarioApi.Services
                 claims: claims,
                 signingCredentials: signingCredentiasl);
 
-            return token;
+            return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
     }
